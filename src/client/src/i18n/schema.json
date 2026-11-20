@@ -282,6 +282,9 @@
 				},
 				"langTr": {
 					"type": "string"
+				},
+				"langEs": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -312,7 +315,8 @@
 				"saveAdminEmail",
 				"adminEmailSaved",
 				"langEn",
-				"langTr"
+				"langTr",
+				"langEs"
 			],
 			"additionalProperties": false
 		},
@@ -396,6 +400,24 @@
 				},
 				"unnamedSlot": {
 					"type": "string"
+				},
+				"seatsLabel": {
+					"type": "string"
+				},
+				"seatsHint": {
+					"type": "string"
+				},
+				"seatsRequired": {
+					"type": "string"
+				},
+				"customSeatPlaceholder": {
+					"type": "string"
+				},
+				"addSeat": {
+					"type": "string"
+				},
+				"seatsCountLabel": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -424,7 +446,13 @@
 				"editTitle",
 				"edit",
 				"save",
-				"unnamedSlot"
+				"unnamedSlot",
+				"seatsLabel",
+				"seatsHint",
+				"seatsRequired",
+				"customSeatPlaceholder",
+				"addSeat",
+				"seatsCountLabel"
 			],
 			"additionalProperties": false
 		},
@@ -532,6 +560,15 @@
 				},
 				"appointmentRejected": {
 					"type": "string"
+				},
+				"seat": {
+					"type": "string"
+				},
+				"whatsapp": {
+					"type": "string"
+				},
+				"openWhatsApp": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -568,7 +605,10 @@
 				"appointmentCanceled",
 				"appointmentDeleted",
 				"appointmentApproved",
-				"appointmentRejected"
+				"appointmentRejected",
+				"seat",
+				"whatsapp",
+				"openWhatsApp"
 			],
 			"additionalProperties": false
 		},
@@ -814,6 +854,33 @@
 				},
 				"slotFullyOccupied": {
 					"type": "string"
+				},
+				"selectSeat": {
+					"type": "string"
+				},
+				"seatFree": {
+					"type": "string"
+				},
+				"seatOccupied": {
+					"type": "string"
+				},
+				"seatRequired": {
+					"type": "string"
+				},
+				"selectedSeatLabel": {
+					"type": "string"
+				},
+				"seatsAvailable": {
+					"type": "string"
+				},
+				"whatsapp": {
+					"type": "string"
+				},
+				"whatsappPlaceholder": {
+					"type": "string"
+				},
+				"whatsappHelp": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -848,7 +915,16 @@
 				"occupiedTimes",
 				"noOccupiedTimes",
 				"overlapOccupied",
-				"slotFullyOccupied"
+				"slotFullyOccupied",
+				"selectSeat",
+				"seatFree",
+				"seatOccupied",
+				"seatRequired",
+				"selectedSeatLabel",
+				"seatsAvailable",
+				"whatsapp",
+				"whatsappPlaceholder",
+				"whatsappHelp"
 			],
 			"additionalProperties": false
 		},
@@ -901,6 +977,9 @@
 					"type": "string"
 				},
 				"langTr": {
+					"type": "string"
+				},
+				"langEs": {
 					"type": "string"
 				},
 				"adminEmail": {
@@ -1376,6 +1455,36 @@
 				},
 				"icsExportDownload": {
 					"type": "string"
+				},
+				"whatsappTemplates": {
+					"type": "string"
+				},
+				"whatsappTemplatesDescription": {
+					"type": "string"
+				},
+				"whatsappTemplatesVariables": {
+					"type": "string"
+				},
+				"whatsappTemplateTitle": {
+					"type": "string"
+				},
+				"whatsappTemplateTitlePlaceholder": {
+					"type": "string"
+				},
+				"whatsappTemplateMessage": {
+					"type": "string"
+				},
+				"whatsappTemplateMessagePlaceholder": {
+					"type": "string"
+				},
+				"whatsappAddTemplate": {
+					"type": "string"
+				},
+				"whatsappSaveTemplates": {
+					"type": "string"
+				},
+				"whatsappTemplatesSaved": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -1395,6 +1504,7 @@
 				"languageSaved",
 				"langEn",
 				"langTr",
+				"langEs",
 				"adminEmail",
 				"adminEmailDescription",
 				"adminEmailField",
@@ -1539,7 +1649,17 @@
 				"icsExportRange",
 				"icsExportFrom",
 				"icsExportTo",
-				"icsExportDownload"
+				"icsExportDownload",
+				"whatsappTemplates",
+				"whatsappTemplatesDescription",
+				"whatsappTemplatesVariables",
+				"whatsappTemplateTitle",
+				"whatsappTemplateTitlePlaceholder",
+				"whatsappTemplateMessage",
+				"whatsappTemplateMessagePlaceholder",
+				"whatsappAddTemplate",
+				"whatsappSaveTemplates",
+				"whatsappTemplatesSaved"
 			],
 			"additionalProperties": false
 		},

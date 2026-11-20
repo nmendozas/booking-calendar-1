@@ -138,6 +138,18 @@
 				},
 				"emailRequiredForApproval": {
 					"type": "string"
+				},
+				"seatRequired": {
+					"type": "string"
+				},
+				"invalidSeat": {
+					"type": "string"
+				},
+				"seatAlreadyTaken": {
+					"type": "string"
+				},
+				"slotFull": {
+					"type": "string"
 				}
 			},
 			"required": [
@@ -156,7 +168,11 @@
 				"alreadyCanceled",
 				"invalidCancelLink",
 				"notPending",
-				"emailRequiredForApproval"
+				"emailRequiredForApproval",
+				"seatRequired",
+				"invalidSeat",
+				"seatAlreadyTaken",
+				"slotFull"
 			],
 			"additionalProperties": false
 		},

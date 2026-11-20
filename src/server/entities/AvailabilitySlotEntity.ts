@@ -24,6 +24,9 @@ export class AvailabilitySlotEntity {
 	@Column({ type: "integer", default: 1 })
 	is_active!: number;
 
+	@Column({ type: "text", nullable: true })
+	seats!: string | null;
+
 	@CreateDateColumn({ type: "datetime" })
 	created_at!: string;
 

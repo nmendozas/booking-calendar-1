@@ -2,8 +2,8 @@ import { useStyletron } from "baseui";
 import { Select } from "baseui/select";
 
 interface Props {
-	language: "en" | "tr";
-	onLanguageChange: (lang: "en" | "tr") => void;
+	language: "en" | "tr" | "es";
+	onLanguageChange: (lang: "en" | "tr" | "es") => void;
 	savingLanguage: boolean;
 	t: (key: string) => string;
 	keyPrefix?: string;
@@ -53,10 +53,11 @@ export default function LanguageSettingsSection({
 				options={[
 					{ id: "en", label: t(`${keyPrefix}.langEn`) },
 					{ id: "tr", label: t(`${keyPrefix}.langTr`) },
+					{ id: "es", label: t(`${keyPrefix}.langEs`) },
 				]}
 				value={[{ id: language }]}
 				onChange={(params) => {
-					const selected = params.value[0]?.id as "en" | "tr";
+					const selected = params.value[0]?.id as "en" | "tr" | "es";
 					if (selected) onLanguageChange(selected);
 				}}
 				clearable={false}

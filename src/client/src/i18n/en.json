@@ -76,7 +76,8 @@
 		"saveAdminEmail": "Save Email",
 		"adminEmailSaved": "Admin email saved",
 		"langEn": "English",
-		"langTr": "Türkçe"
+		"langTr": "Türkçe",
+		"langEs": "Español"
 	},
 	"slots": {
 		"title": "Available Time Slots",
@@ -104,7 +105,13 @@
 		"editTitle": "Edit Time Slot",
 		"edit": "Edit",
 		"save": "Save Changes",
-		"unnamedSlot": "Unnamed Slot"
+		"unnamedSlot": "Unnamed Slot",
+		"seatsLabel": "Available Seats",
+		"seatsHint": "Select or add the seats available for this trip.",
+		"seatsRequired": "Please select at least one seat",
+		"customSeatPlaceholder": "Add custom seat (e.g. Seat 5)",
+		"addSeat": "Add Seat",
+		"seatsCountLabel": "seats"
 	},
 	"appointments": {
 		"title": "Appointments",
@@ -140,7 +147,10 @@
 		"appointmentCanceled": "Appointment canceled",
 		"appointmentDeleted": "Appointment deleted",
 		"appointmentApproved": "Appointment approved",
-		"appointmentRejected": "Appointment rejected"
+		"appointmentRejected": "Appointment rejected",
+		"seat": "Seat",
+		"whatsapp": "WhatsApp",
+		"openWhatsApp": "Open WhatsApp"
 	},
 	"links": {
 		"title": "Booking Links",
@@ -210,7 +220,16 @@
 		"noOccupiedTimes": "No active appointments inside this slot.",
 		"overlapOccupied": "Selected range overlaps an occupied time range",
 		"slotFullyOccupied": "This slot is fully occupied",
-		"emailRequiredForApproval": "Email is required because this booking needs admin approval"
+		"emailRequiredForApproval": "Email is required because this booking needs admin approval",
+		"selectSeat": "Select your seat *",
+		"seatFree": "Available",
+		"seatOccupied": "Booked",
+		"seatRequired": "Please select an available seat",
+		"selectedSeatLabel": "Selected seat",
+		"seatsAvailable": "seats available",
+		"whatsapp": "WhatsApp number (optional)",
+		"whatsappPlaceholder": "e.g. +573001234567",
+		"whatsappHelp": "Include your country code so the driver can contact you on WhatsApp."
 	},
 	"settings": {
 		"title": "Settings",
@@ -229,6 +248,7 @@
 		"languageSaved": "Language changed successfully",
 		"langEn": "English",
 		"langTr": "Türkçe",
+		"langEs": "Español",
 		"adminEmail": "Admin Email",
 		"adminEmailDescription": "Set the email address used for admin notifications sent by the system.",
 		"adminEmailField": "Email Address",
@@ -385,7 +405,17 @@
 		"icsExportRange": "Export Range",
 		"icsExportFrom": "From",
 		"icsExportTo": "To",
-		"icsExportDownload": "Download ICS"
+		"icsExportDownload": "Download ICS",
+		"whatsappTemplates": "Default WhatsApp Messages",
+		"whatsappTemplatesDescription": "Save preset messages to quickly send reminders or trip updates when opening a passenger's WhatsApp chat.",
+		"whatsappTemplatesVariables": "Optional variables: {nombre}, {asiento}, {fecha}, {lugar}",
+		"whatsappTemplateTitle": "Template Title",
+		"whatsappTemplateTitlePlaceholder": "e.g. Trip Reminder",
+		"whatsappTemplateMessage": "Message",
+		"whatsappTemplateMessagePlaceholder": "Hi {nombre}, reminder about your trip...",
+		"whatsappAddTemplate": "Add Template",
+		"whatsappSaveTemplates": "Save Messages",
+		"whatsappTemplatesSaved": "WhatsApp templates saved"
 	},
 	"planner": {
 		"title": "Planner",

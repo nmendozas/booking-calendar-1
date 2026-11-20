@@ -10,9 +10,10 @@ import NotificationSettingSection from "./NotificationSettingSection";
 import ThemeColorsSection from "./ThemeColorsSection";
 import VersionSection from "./VersionSection";
 import WebhookSettingsSection from "./WebhookSettingsSection";
+import WhatsAppTemplatesSection from "./WhatsAppTemplatesSection";
 
 interface Props {
-	language: "en" | "tr";
+	language: "en" | "tr" | "es";
 	t: (key: string) => string;
 	settings: SettingsPageState;
 }
@@ -72,6 +73,17 @@ export default function SettingsPageSections({ language, t, settings }: Props) {
 					setAdminEmail={settings.setAdminEmail}
 					t={t}
 					keyPrefix="settings"
+					surface="list"
+				/>
+			</section>
+
+			<section id="whatsapp-templates">
+				<WhatsAppTemplatesSection
+					templates={settings.whatsappTemplates}
+					setTemplates={settings.setWhatsappTemplates}
+					onSave={settings.handleSaveWhatsappTemplates}
+					saving={settings.savingWhatsappTemplates}
+					t={t}
 					surface="list"
 				/>
 			</section>

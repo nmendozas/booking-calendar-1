@@ -19,7 +19,10 @@ interface Props {
 	setNote: (value: string) => void;
 	setSelectedEndAt: (value: string) => void;
 	setSelectedStartAt: (value: string) => void;
-	requiresApproval: boolean;
+	setWhatsapp: (value: string) => void;
+	whatsapp: string;
+	selectedSeat?: string;
+	isSeatTrip?: boolean;
 	t: (key: string) => string;
 }
 
@@ -38,7 +41,10 @@ export default function BookingFormSection({
 	setNote,
 	setSelectedEndAt,
 	setSelectedStartAt,
-	requiresApproval,
+	setWhatsapp,
+	whatsapp,
+	selectedSeat,
+	isSeatTrip = false,
 	t,
 }: Props) {
 	const [css] = useStyletron();
@@ -64,11 +70,31 @@ export default function BookingFormSection({
 				{t("booking.yourInfo")}
 			</h2>
 
+			{isSeatTrip && (
+				<div
+					className={css({
+						marginBottom: "14px",
+						padding: "10px 12px",
+						borderRadius: "8px",
+						backgroundColor: "var(--color-bg-tertiary)",
+						border: "1px solid var(--color-accent-300)",
+						fontSize: "13px",
+						color: selectedSeat
+							? "var(--color-text-primary)"
+							: "var(--color-text-tertiary)",
+					})}
+				>
+					<strong>{t("booking.selectedSeatLabel")}:</strong>{" "}
+					{selectedSeat || t("booking.seatRequired")}
+				</div>
+			)}
+
 			<FormControl label={t("booking.startTime")}>
 				<Input
 					type="datetime-local"
 					value={selectedStartAt}
 					onChange={(e) => setSelectedStartAt(e.currentTarget.value)}
+					disabled={isSeatTrip}
 					required
 					overrides={{
 						Root: {
@@ -87,6 +113,7 @@ export default function BookingFormSection({
 					type="datetime-local"
 					value={selectedEndAt}
 					onChange={(e) => setSelectedEndAt(e.currentTarget.value)}
+					disabled={isSeatTrip}
 					required
 					overrides={{
 						Root: {
@@ -110,9 +137,19 @@ export default function BookingFormSection({
 			</FormControl>
 
 			<FormControl
-				label={
-					requiresApproval ? `${t("booking.email")} *` : t("booking.email")
-				}
+				label={t("booking.whatsapp")}
+				caption={t("booking.whatsappHelp")}
+			>
+				<Input
+					value={whatsapp}
+					onChange={(e) => setWhatsapp(e.currentTarget.value)}
+					placeholder={t("booking.whatsappPlaceholder")}
+					type="tel"
+				/>
+			</FormControl>
+
+			<FormControl
+				label={t("booking.email")}
 				caption={t("booking.emailHelp")}
 			>
 				<Input
@@ -120,7 +157,6 @@ export default function BookingFormSection({
 					onChange={(e) => setEmail(e.currentTarget.value)}
 					placeholder="your@email.com"
 					type="email"
-					required={requiresApproval}
 				/>
 			</FormControl>
 

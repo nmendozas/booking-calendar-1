@@ -7,13 +7,14 @@ import {
 	type ApiCalDAVSettings,
 	type ApiVersionInfo,
 	type ApiWebhookSettings,
+	type ApiWhatsAppTemplate,
 	api,
 } from "../../../api";
 import { useAuth } from "../../../context/AuthContext";
 
 interface Params {
 	t: (key: string) => string;
-	setLanguage: (lang: "en" | "tr") => Promise<void>;
+	setLanguage: (lang: "en" | "tr" | "es") => Promise<void>;
 }
 
 function getErrorMessage(error: unknown, fallback: string): string {
@@ -170,6 +171,10 @@ export function useSettingsPage({ setLanguage, t }: Params) {
 	const [savingLanguage, setSavingLanguage] = useState(false);
 	const [adminEmail, setAdminEmail] = useState("");
 	const [savedAdminEmail, setSavedAdminEmail] = useState("");
+	const [whatsappTemplates, setWhatsappTemplates] = useState<
+		ApiWhatsAppTemplate[]
+	>([]);
+	const [savingWhatsappTemplates, setSavingWhatsappTemplates] = useState(false);
 	const [savingAdminEmail, setSavingAdminEmail] = useState(false);
 	const [calendarSharingEnabled, setCalendarSharingEnabled] = useState(false);
 	const [savingCalendarSharing, setSavingCalendarSharing] = useState(false);
@@ -254,6 +259,12 @@ export function useSettingsPage({ setLanguage, t }: Params) {
 			.then((email) => {
 				setAdminEmail(email);
 				setSavedAdminEmail(email);
+			})
+			.catch(() => {});
+		api
+			.getWhatsAppTemplates()
+			.then((res) => {
+				setWhatsappTemplates(res.data.templates);
 			})
 			.catch(() => {});
 	}, []);
@@ -389,7 +400,7 @@ export function useSettingsPage({ setLanguage, t }: Params) {
 	);
 
 	const handleLanguageChange = useCallback(
-		async (lang: "en" | "tr") => {
+		async (lang: "en" | "tr" | "es") => {
 			setSavingLanguage(true);
 			try {
 				await setLanguage(lang);
@@ -788,6 +799,21 @@ export function useSettingsPage({ setLanguage, t }: Params) {
 		handleRepairCalDAVQueueItem,
 		handleRetryCalDAVSync,
 		handleSaveAdminEmail,
+		handleSaveWhatsappTemplates: async () => {
+			setSavingWhatsappTemplates(true);
+			try {
+				const res = await api.saveWhatsAppTemplates(whatsappTemplates);
+				setWhatsappTemplates(res.data.templates);
+				toaster.positive(t("settings.whatsappTemplatesSaved"), {});
+			} catch (error: unknown) {
+				toaster.negative(getErrorMessage(error, t("common.error")), {});
+			} finally {
+				setSavingWhatsappTemplates(false);
+			}
+		},
+		whatsappTemplates,
+		setWhatsappTemplates,
+		savingWhatsappTemplates,
 		handleToggleCalendarSharing,
 		handleToggleEmailNotifications,
 		handleTogglePushNotifications,

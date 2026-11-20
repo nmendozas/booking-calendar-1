@@ -3,12 +3,20 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../../../api";
 import { useListFilters } from "../../../hooks/useListFilters";
 
+export const DEFAULT_CAR_SEATS = [
+	"Copiloto (delantero)",
+	"Trasero izquierdo",
+	"Trasero medio",
+	"Trasero derecho",
+];
+
 export interface Slot {
 	id: number;
 	name: string | null;
 	start_at: string;
 	end_at: string;
 	is_active: number;
+	seats: string[] | null;
 	created_at: string;
 }
 
@@ -26,6 +34,7 @@ export function useSlotsPage(t: (key: string) => string) {
 	const [startAt, setStartAt] = useState("");
 	const [endAt, setEndAt] = useState("");
 	const [slotName, setSlotName] = useState("");
+	const [selectedSeats, setSelectedSeats] = useState<string[]>(DEFAULT_CAR_SEATS);
 	const [loading, setLoading] = useState(false);
 	const [editingSlot, setEditingSlot] = useState<Slot | null>(null);
 	const [initialLoading, setInitialLoading] = useState(true);
@@ -50,6 +59,10 @@ export function useSlotsPage(t: (key: string) => string) {
 			toaster.negative(t("slots.startEndRequired"), {});
 			return;
 		}
+		if (selectedSeats.length === 0) {
+			toaster.negative(t("slots.seatsRequired"), {});
+			return;
+		}
 
 		setLoading(true);
 		try {
@@ -57,24 +70,30 @@ export function useSlotsPage(t: (key: string) => string) {
 				slotName.trim(),
 				new Date(startAt).toISOString(),
 				new Date(endAt).toISOString(),
+				selectedSeats,
 			);
 			toaster.positive(t("slots.created"), {});
 			setModalOpen(false);
 			setSlotName("");
 			setStartAt("");
 			setEndAt("");
+			setSelectedSeats(DEFAULT_CAR_SEATS);
 			await loadSlots();
 		} catch (err: unknown) {
 			toaster.negative(getErrorMessage(err, t("common.error")), {});
 		} finally {
 			setLoading(false);
 		}
-	}, [endAt, loadSlots, slotName, startAt, t]);
+	}, [endAt, loadSlots, selectedSeats, slotName, startAt, t]);
 
 	const handleUpdate = useCallback(async () => {
 		if (!editingSlot) return;
 		if (!slotName.trim() || !startAt || !endAt) {
 			toaster.negative(t("slots.startEndRequired"), {});
+			return;
+		}
+		if (selectedSeats.length === 0) {
+			toaster.negative(t("slots.seatsRequired"), {});
 			return;
 		}
 
@@ -84,6 +103,7 @@ export function useSlotsPage(t: (key: string) => string) {
 				name: slotName.trim(),
 				start_at: new Date(startAt).toISOString(),
 				end_at: new Date(endAt).toISOString(),
+				seats: selectedSeats,
 			});
 			toaster.positive(t("slots.updated"), {});
 			setModalOpen(false);
@@ -91,13 +111,14 @@ export function useSlotsPage(t: (key: string) => string) {
 			setSlotName("");
 			setStartAt("");
 			setEndAt("");
+			setSelectedSeats(DEFAULT_CAR_SEATS);
 			await loadSlots();
 		} catch (err: unknown) {
 			toaster.negative(getErrorMessage(err, t("common.error")), {});
 		} finally {
 			setLoading(false);
 		}
-	}, [editingSlot, endAt, loadSlots, slotName, startAt, t]);
+	}, [editingSlot, endAt, loadSlots, selectedSeats, slotName, startAt, t]);
 
 	const handleToggle = useCallback(
 		async (id: number, currentActive: number) => {
@@ -125,11 +146,23 @@ export function useSlotsPage(t: (key: string) => string) {
 		[loadSlots, t],
 	);
 
+	const openCreateModal = useCallback(() => {
+		setEditingSlot(null);
+		setSlotName("");
+		setStartAt("");
+		setEndAt("");
+		setSelectedSeats(DEFAULT_CAR_SEATS);
+		setModalOpen(true);
+	}, []);
+
 	const openEditModal = useCallback((slot: Slot) => {
 		setEditingSlot(slot);
 		setSlotName(slot.name || "");
 		setStartAt(new Date(slot.start_at).toISOString().slice(0, 16));
 		setEndAt(new Date(slot.end_at).toISOString().slice(0, 16));
+		setSelectedSeats(
+			slot.seats && slot.seats.length > 0 ? slot.seats : DEFAULT_CAR_SEATS,
+		);
 		setModalOpen(true);
 	}, []);
 
@@ -180,11 +213,14 @@ export function useSlotsPage(t: (key: string) => string) {
 		setStatusFilter,
 		setSlotName,
 		setStartAt,
+		selectedSeats,
+		setSelectedSeats,
 		slotName,
 		slots,
 		startAt,
 		statusFilter,
 		editingSlot,
+		openCreateModal,
 		openEditModal,
 		search,
 		setSearch,

@@ -13,6 +13,15 @@ declare let self: ServiceWorkerGlobalScope;
 // Clean up old caches
 cleanupOutdatedCaches();
 
+// Activate updated service worker immediately
+self.addEventListener("install", () => {
+	void self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+	event.waitUntil(self.clients.claim());
+});
+
 // Precache resources
 precacheAndRoute(self.__WB_MANIFEST);
 

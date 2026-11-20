@@ -2,12 +2,13 @@ import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../api";
 import en from "../i18n/en.json";
+import es from "../i18n/es.json";
 import tr from "../i18n/tr.json";
 
-type Language = "en" | "tr";
+type Language = "en" | "tr" | "es";
 type NestedRecord = { [key: string]: string | NestedRecord };
 
-const translations: Record<Language, NestedRecord> = { en, tr };
+const translations: Record<Language, NestedRecord> = { en, tr, es };
 
 function resolve(obj: NestedRecord, key: string): string {
 	const keys = key.split(".");
@@ -44,7 +45,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 		api
 			.getLanguage()
 			.then((lang) => {
-				if (lang === "tr" || lang === "en") setLang(lang);
+				if (lang === "tr" || lang === "en" || lang === "es") setLang(lang);
 			})
 			.catch(() => {})
 			.finally(() => setLoaded(true));
@@ -57,7 +58,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 		setLang(lang);
 	};
 
-	const locale = language === "tr" ? "tr-TR" : "en-US";
+	const locale =
+		language === "tr" ? "tr-TR" : language === "es" ? "es-ES" : "en-US";
 
 	if (!loaded) return null;
 

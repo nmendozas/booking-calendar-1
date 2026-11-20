@@ -37,7 +37,11 @@
 		"alreadyCanceled": "Appointment is already canceled",
 		"invalidCancelLink": "Invalid cancellation link",
 		"notPending": "This appointment is not pending approval",
-		"emailRequiredForApproval": "Email is required for appointments that need approval"
+		"emailRequiredForApproval": "Email is required for appointments that need approval",
+		"seatRequired": "Please select an available seat",
+		"invalidSeat": "Selected seat is not available for this trip",
+		"seatAlreadyTaken": "Selected seat is already booked",
+		"slotFull": "No seats remaining for this trip"
 	},
 	"link": {
 		"invalidToken": "Invalid or expired token",

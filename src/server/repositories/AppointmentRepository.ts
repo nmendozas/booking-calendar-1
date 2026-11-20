@@ -23,6 +23,8 @@ const APPOINTMENT_SELECT_COLUMNS: string[] = [
 	"a.email as email",
 	"a.meeting_place as meeting_place",
 	"a.note as note",
+	"a.seat as seat",
+	"a.whatsapp as whatsapp",
 	"COALESCE(a.start_at, s.start_at) as start_at",
 	"COALESCE(a.end_at, s.end_at) as end_at",
 	"a.slug_id as slug_id",
@@ -218,6 +220,50 @@ export class AppointmentRepository {
 		return count > 0;
 	}
 
+	async countActiveInSlot(
+		slotId: number,
+		manager?: EntityManager,
+	): Promise<number> {
+		return this.repo(manager)
+			.createQueryBuilder("a")
+			.where("a.slot_id = :slotId", { slotId })
+			.andWhere("a.canceled_at IS NULL")
+			.andWhere("a.status != 'rejected'")
+			.getCount();
+	}
+
+	async isSeatBookedInSlot(
+		slotId: number,
+		seat: string,
+		manager?: EntityManager,
+	): Promise<boolean> {
+		const count = await this.repo(manager)
+			.createQueryBuilder("a")
+			.where("a.slot_id = :slotId", { slotId })
+			.andWhere("a.seat = :seat", { seat })
+			.andWhere("a.canceled_at IS NULL")
+			.andWhere("a.status != 'rejected'")
+			.getCount();
+		return count > 0;
+	}
+
+	async findActiveBookedSeatsBySlotIds(
+		slotIds: number[],
+		manager?: EntityManager,
+	): Promise<Array<{ slot_id: number; seat: string | null }>> {
+		if (slotIds.length === 0) {
+			return [];
+		}
+
+		return this.repo(manager)
+			.createQueryBuilder("a")
+			.select(["a.slot_id as slot_id", "a.seat as seat"])
+			.where("a.slot_id IN (:...slotIds)", { slotIds })
+			.andWhere("a.canceled_at IS NULL")
+			.andWhere("a.status != 'rejected'")
+			.getRawMany<{ slot_id: number; seat: string | null }>();
+	}
+
 	async findActiveIntervalsBySlotIds(
 		slotIds: number[],
 		manager?: EntityManager,
@@ -256,6 +302,8 @@ export class AppointmentRepository {
 			email: input.email || null,
 			meeting_place: input.meeting_place || null,
 			note: input.note || null,
+			seat: input.seat?.trim() || null,
+			whatsapp: input.whatsapp?.trim() || null,
 			start_at: input.start_at,
 			end_at: input.end_at,
 			slug_id: slugId,
@@ -308,6 +356,8 @@ export class AppointmentRepository {
 			email: saved.email,
 			meeting_place: saved.meeting_place,
 			note: saved.note,
+			seat: saved.seat ?? null,
+			whatsapp: saved.whatsapp ?? null,
 			start_at: saved.start_at || input.start_at,
 			end_at: saved.end_at || input.end_at,
 			slug_id: saved.slug_id,

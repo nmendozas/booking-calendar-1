@@ -76,7 +76,8 @@
 		"saveAdminEmail": "E-postayı Kaydet",
 		"adminEmailSaved": "Admin e-postası kaydedildi",
 		"langEn": "English",
-		"langTr": "Türkçe"
+		"langTr": "Türkçe",
+		"langEs": "Español"
 	},
 	"slots": {
 		"title": "Müsait Zaman Aralıkları",
@@ -104,7 +105,13 @@
 		"editTitle": "Zaman Aralığını Düzenle",
 		"edit": "Düzenle",
 		"save": "Değişiklikleri Kaydet",
-		"unnamedSlot": "İsimsiz Slot"
+		"unnamedSlot": "İsimsiz Slot",
+		"seatsLabel": "Mevcut Koltuklar",
+		"seatsHint": "Bu yolculuk için uygun koltukları seçin veya ekleyin.",
+		"seatsRequired": "Lütfen en az bir koltuk seçin",
+		"customSeatPlaceholder": "Özel koltuk ekle (örn. Koltuk 5)",
+		"addSeat": "Koltuk Ekle",
+		"seatsCountLabel": "koltuk"
 	},
 	"appointments": {
 		"title": "Randevular",
@@ -140,7 +147,10 @@
 		"appointmentCanceled": "Randevu iptal edildi",
 		"appointmentDeleted": "Randevu silindi",
 		"appointmentApproved": "Randevu onaylandı",
-		"appointmentRejected": "Randevu reddedildi"
+		"appointmentRejected": "Randevu reddedildi",
+		"seat": "Koltuk",
+		"whatsapp": "WhatsApp",
+		"openWhatsApp": "WhatsApp'ı Aç"
 	},
 	"links": {
 		"title": "Randevu Bağlantıları",
@@ -210,7 +220,16 @@
 		"noOccupiedTimes": "Bu slot içinde aktif randevu yok.",
 		"overlapOccupied": "Seçilen aralık dolu bir zaman aralığı ile çakışıyor",
 		"slotFullyOccupied": "Bu slot tamamen dolu",
-		"emailRequiredForApproval": "Bu randevu admin onayı gerektirdiği için e-posta adresi zorunludur"
+		"emailRequiredForApproval": "Bu randevu admin onayı gerektirdiği için e-posta adresi zorunludur",
+		"selectSeat": "Koltuğunuzu seçin *",
+		"seatFree": "Müsait",
+		"seatOccupied": "Dolu",
+		"seatRequired": "Lütfen uygun bir koltuk seçin",
+		"selectedSeatLabel": "Seçilen koltuk",
+		"seatsAvailable": "koltuk müsait",
+		"whatsapp": "WhatsApp numarası (isteğe bağlı)",
+		"whatsappPlaceholder": "örn. +905551234567",
+		"whatsappHelp": "Sürücünün WhatsApp üzerinden sizinle iletişime geçebilmesi için ülke kodunu ekleyin."
 	},
 	"settings": {
 		"title": "Ayarlar",
@@ -229,6 +248,7 @@
 		"languageSaved": "Dil başarıyla değiştirildi",
 		"langEn": "English",
 		"langTr": "Türkçe",
+		"langEs": "Español",
 		"adminEmail": "Admin E-posta",
 		"adminEmailDescription": "Sistemin admin bildirimlerinde kullanacağı e-posta adresini girin.",
 		"adminEmailField": "E-posta Adresi",
@@ -385,7 +405,17 @@
 		"icsExportRange": "Aralık Seç",
 		"icsExportFrom": "Başlangıç",
 		"icsExportTo": "Bitiş",
-		"icsExportDownload": "ICS İndir"
+		"icsExportDownload": "ICS İndir",
+		"whatsappTemplates": "Varsayılan WhatsApp Mesajları",
+		"whatsappTemplatesDescription": "Bir yolcunun WhatsApp sohbetini açtığınızda hatırlatma veya bilgi göndermek için hazır mesajlar kaydedin.",
+		"whatsappTemplatesVariables": "İsteğe bağlı değişkenler: {nombre}, {asiento}, {fecha}, {lugar}",
+		"whatsappTemplateTitle": "Şablon Başlığı",
+		"whatsappTemplateTitlePlaceholder": "örn. Yolculuk Hatırlatması",
+		"whatsappTemplateMessage": "Mesaj",
+		"whatsappTemplateMessagePlaceholder": "Merhaba {nombre}, yolculuğunuz hakkında...",
+		"whatsappAddTemplate": "Şablon Ekle",
+		"whatsappSaveTemplates": "Mesajları Kaydet",
+		"whatsappTemplatesSaved": "WhatsApp şablonları kaydedildi"
 	},
 	"planner": {
 		"title": "Planlayıcı",

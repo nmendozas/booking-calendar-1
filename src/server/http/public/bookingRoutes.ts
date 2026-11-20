@@ -70,6 +70,8 @@ export const handlePublicBookingRoutes: PublicRouteHandler = async (args) => {
 			email?: string;
 			meeting_place?: string;
 			note?: string;
+			seat?: string;
+			whatsapp?: string;
 			start_at?: string;
 			end_at?: string;
 		}>(args.request);

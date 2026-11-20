@@ -47,6 +47,8 @@ export class AppointmentController {
 			email?: string;
 			meeting_place?: string;
 			note?: string;
+			seat?: string;
+			whatsapp?: string;
 			start_at?: string;
 			end_at?: string;
 		},
@@ -79,6 +81,8 @@ export class AppointmentController {
 					email: body.email,
 					meeting_place: body.meeting_place,
 					note: body.note,
+					seat: body.seat,
+					whatsapp: body.whatsapp,
 					start_at: body.start_at,
 					end_at: body.end_at,
 				},

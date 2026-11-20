@@ -1,10 +1,10 @@
 import { format, getDay, parse, startOfWeek } from "date-fns";
-import { enUS, tr } from "date-fns/locale";
+import { enUS, es, tr } from "date-fns/locale";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import type { CalendarEvent, CalendarView } from "../types";
 
-const locales = { "en-US": enUS, "tr-TR": tr };
+const locales = { "en-US": enUS, "tr-TR": tr, "es-ES": es };
 const localizer = dateFnsLocalizer({
 	format,
 	parse,
@@ -14,7 +14,7 @@ const localizer = dateFnsLocalizer({
 });
 
 interface Props {
-	culture: "en-US" | "tr-TR";
+	culture: "en-US" | "tr-TR" | "es-ES";
 	date: Date;
 	eventStyleGetter: (event: CalendarEvent) => {
 		style: Record<string, string | number>;

@@ -23,7 +23,9 @@ export default function BookingPage() {
 		name,
 		note,
 		selectedEndAt,
+		selectedSeat,
 		selectedSlot,
+		selectedSlotData,
 		selectedSlotBusyIntervals,
 		selectedStartAt,
 		selectSlot,
@@ -31,10 +33,12 @@ export default function BookingPage() {
 		setMeetingPlace,
 		setName,
 		setNote,
+		setSelectedSeat,
 		setSelectedEndAt,
 		setSelectedStartAt,
+		setWhatsapp,
+		whatsapp,
 		slots,
-		requiresApproval,
 		createdAppointmentToken,
 		valid,
 	} = useBookingPage(slugId, t);
@@ -116,6 +120,9 @@ export default function BookingPage() {
 						<BookingSlotsSection
 							slots={slots}
 							selectedSlot={selectedSlot}
+							selectedSlotData={selectedSlotData}
+							selectedSeat={selectedSeat}
+							onSelectSeat={setSelectedSeat}
 							selectedSlotBusyIntervals={selectedSlotBusyIntervals}
 							onSelect={selectSlot}
 							formatDate={formatDate}
@@ -148,7 +155,12 @@ export default function BookingPage() {
 								setNote={setNote}
 								setSelectedEndAt={setSelectedEndAt}
 								setSelectedStartAt={setSelectedStartAt}
-								requiresApproval={requiresApproval}
+								setWhatsapp={setWhatsapp}
+								whatsapp={whatsapp}
+								selectedSeat={selectedSeat}
+								isSeatTrip={Boolean(
+									selectedSlotData?.seats && selectedSlotData.seats.length > 0,
+								)}
 								t={t}
 							/>
 						</div>

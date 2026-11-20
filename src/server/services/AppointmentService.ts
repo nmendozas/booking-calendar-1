@@ -158,11 +158,6 @@ export class AppointmentService {
 			throw new Error(t("appointment.slotNotAllowedForLink"));
 		}
 
-		// Require guestEmail if requiresApproval is true
-		if (link.requires_approval && !input.email?.trim()) {
-			throw new Error(t("appointment.emailRequiredForApproval"));
-		}
-
 		// Validate slot exists and is active
 		const slot = await this.slotRepo.findById(input.slot_id);
 		if (!slot) {
@@ -195,16 +190,42 @@ export class AppointmentService {
 			throw new Error(t("appointment.overlap"));
 		}
 
-		// Use a transaction to prevent overlapping bookings in the same slot
+		// Use a transaction to enforce seat capacity or prevent overlapping bookings
 		const appointment = await AppDataSource.transaction(async (manager) => {
-			const hasOverlap = await this.appointmentRepo.hasOverlapInSlot(
-				input.slot_id,
-				input.start_at,
-				input.end_at,
-				manager,
-			);
-			if (hasOverlap) {
-				throw new Error(t("appointment.overlap"));
+			const configuredSeats = slot.seats;
+			if (configuredSeats && configuredSeats.length > 0) {
+				const selectedSeat = input.seat?.trim() || "";
+				if (!selectedSeat) {
+					throw new Error(t("appointment.seatRequired"));
+				}
+				if (!configuredSeats.includes(selectedSeat)) {
+					throw new Error(t("appointment.invalidSeat"));
+				}
+				const seatTaken = await this.appointmentRepo.isSeatBookedInSlot(
+					input.slot_id,
+					selectedSeat,
+					manager,
+				);
+				if (seatTaken) {
+					throw new Error(t("appointment.seatAlreadyTaken"));
+				}
+				const activeCount = await this.appointmentRepo.countActiveInSlot(
+					input.slot_id,
+					manager,
+				);
+				if (activeCount >= configuredSeats.length) {
+					throw new Error(t("appointment.slotFull"));
+				}
+			} else {
+				const hasOverlap = await this.appointmentRepo.hasOverlapInSlot(
+					input.slot_id,
+					input.start_at,
+					input.end_at,
+					manager,
+				);
+				if (hasOverlap) {
+					throw new Error(t("appointment.overlap"));
+				}
 			}
 
 			const status = link.requires_approval ? "pending" : "approved";

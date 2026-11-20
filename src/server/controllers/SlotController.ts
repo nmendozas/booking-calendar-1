@@ -31,6 +31,7 @@ export class SlotController {
 		name?: string;
 		start_at?: string;
 		end_at?: string;
+		seats?: string[];
 	}): Promise<{ status: number; body: ApiResponse }> {
 		if (!body.name || !body.start_at || !body.end_at) {
 			return {
@@ -44,6 +45,7 @@ export class SlotController {
 				name: body.name,
 				start_at: body.start_at,
 				end_at: body.end_at,
+				seats: body.seats,
 			});
 			return { status: 201, body: { success: true, data: slot } };
 		} catch (err: unknown) {
@@ -114,7 +116,12 @@ export class SlotController {
 
 	async updateSlot(
 		id: number,
-		body: { name?: string; start_at?: string; end_at?: string },
+		body: {
+			name?: string;
+			start_at?: string;
+			end_at?: string;
+			seats?: string[];
+		},
 	): Promise<{ status: number; body: ApiResponse }> {
 		try {
 			const slot = await this.slotService.updateSlot(id, body);

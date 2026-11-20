@@ -1,5 +1,8 @@
 import { useStyletron } from "baseui";
-import type { ApiCalDAVRepairAction } from "../../../api";
+import type {
+	ApiCalDAVRepairAction,
+	ApiWhatsAppTemplate,
+} from "../../../api";
 import type { Appointment } from "../hooks/useAppointmentsPage";
 import AppointmentCard from "./AppointmentCard";
 
@@ -15,6 +18,7 @@ interface Props {
 	repairingAction: ApiCalDAVRepairAction | null;
 	isPastAppointment: (appointment: Appointment) => boolean;
 	canDeleteAppointment: (appointment: Appointment) => boolean;
+	whatsappTemplates: ApiWhatsAppTemplate[];
 	t: (key: string) => string;
 }
 
@@ -30,6 +34,7 @@ export default function AppointmentsListSection({
 	repairingAction,
 	isPastAppointment,
 	canDeleteAppointment,
+	whatsappTemplates,
 	t,
 }: Props) {
 	const [css] = useStyletron();
@@ -62,6 +67,7 @@ export default function AppointmentsListSection({
 					repairingAction={repairingAction}
 					isPast={isPastAppointment(apt)}
 					canDelete={canDeleteAppointment(apt)}
+					whatsappTemplates={whatsappTemplates}
 					t={t}
 				/>
 			))}

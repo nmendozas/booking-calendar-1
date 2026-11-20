@@ -1,10 +1,11 @@
 import { SettingsRepository } from "../repositories/SettingsRepository";
 import en from "./en.json";
+import es from "./es.json";
 import tr from "./tr.json";
 
 type NestedRecord = { [key: string]: string | NestedRecord };
 
-const translations: Record<string, NestedRecord> = { en, tr };
+const translations: Record<string, NestedRecord> = { en, tr, es };
 
 let currentLanguage = "en";
 

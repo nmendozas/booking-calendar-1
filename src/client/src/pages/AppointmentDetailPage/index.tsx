@@ -211,6 +211,17 @@ export default function AppointmentDetailPage() {
 									: t("slots.active")}
 						</span>
 					</div>
+					{appointment.seat && (
+						<div className={css({ color: "var(--color-text-secondary)" })}>
+							<strong>{t("appointments.seat")}:</strong> {appointment.seat}
+						</div>
+					)}
+					{appointment.whatsapp && (
+						<div className={css({ color: "var(--color-text-secondary)" })}>
+							<strong>{t("appointments.whatsapp")}:</strong>{" "}
+							{appointment.whatsapp}
+						</div>
+					)}
 					{appointment.meeting_place && (
 						<div className={css({ color: "var(--color-text-secondary)" })}>
 							<strong>{t("appointments.meetingPlace")}:</strong>{" "}

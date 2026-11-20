@@ -68,7 +68,9 @@ export default function PublicCalendarPage() {
 				})}
 			>
 				<PublicCalendarView
-					culture={language === "tr" ? "tr-TR" : "en-US"}
+					culture={
+						language === "tr" ? "tr-TR" : language === "es" ? "es-ES" : "en-US"
+					}
 					date={date}
 					eventStyleGetter={eventStyleGetter}
 					events={events}

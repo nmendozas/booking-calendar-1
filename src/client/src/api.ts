@@ -13,6 +13,7 @@ export interface ApiSlot {
 	start_at: string;
 	end_at: string;
 	is_active: number;
+	seats: string[] | null;
 	created_at: string;
 }
 
@@ -23,6 +24,8 @@ export interface ApiBusyInterval {
 
 export interface ApiPublicSlot extends ApiSlot {
 	busy_intervals: ApiBusyInterval[];
+	booked_seats: string[];
+	booked_count: number;
 }
 
 export interface ApiAppointment {
@@ -32,6 +35,8 @@ export interface ApiAppointment {
 	email: string | null;
 	meeting_place: string | null;
 	note: string | null;
+	seat: string | null;
+	whatsapp: string | null;
 	start_at: string;
 	end_at: string;
 	slug_id: string | null;
@@ -147,6 +152,12 @@ export interface ApiCalDAVSettings {
 	last_sync_error: string | null;
 	health: ApiCalDAVSyncHealth;
 	calendars: ApiCalDAVCalendar[];
+}
+
+export interface ApiWhatsAppTemplate {
+	id: string;
+	title: string;
+	message: string;
 }
 
 export type ApiCalDAVRepairAction =
@@ -327,10 +338,15 @@ export const api = {
 	// Admin - Slots
 	getSlots: () => request<ApiResponse<ApiSlot[]>>("/admin/slots"),
 
-	createSlot: (name: string, start_at: string, end_at: string) =>
+	createSlot: (
+		name: string,
+		start_at: string,
+		end_at: string,
+		seats?: string[],
+	) =>
 		request<ApiResponse<ApiSlot>>("/admin/slots", {
 			method: "POST",
-			body: JSON.stringify({ name, start_at, end_at }),
+			body: JSON.stringify({ name, start_at, end_at, seats }),
 		}),
 
 	toggleSlot: (id: number, is_active: boolean) =>
@@ -352,7 +368,12 @@ export const api = {
 
 	updateSlot: (
 		id: number,
-		data: { name?: string; start_at?: string; end_at?: string },
+		data: {
+			name?: string;
+			start_at?: string;
+			end_at?: string;
+			seats?: string[];
+		},
 	) =>
 		request<ApiResponse<ApiSlot>>(`/admin/slots/${id}`, {
 			method: "PUT",
@@ -452,6 +473,8 @@ export const api = {
 			email?: string;
 			meeting_place?: string;
 			note?: string;
+			seat?: string;
+			whatsapp?: string;
 			start_at: string;
 			end_at: string;
 		},
@@ -525,6 +548,20 @@ export const api = {
 			{
 				method: "PUT",
 				body: JSON.stringify({ email }),
+			},
+		),
+
+	getWhatsAppTemplates: () =>
+		request<ApiResponse<{ templates: ApiWhatsAppTemplate[] }>>(
+			"/admin/settings/whatsapp-templates",
+		),
+
+	saveWhatsAppTemplates: (templates: ApiWhatsAppTemplate[]) =>
+		request<ApiResponse<{ templates: ApiWhatsAppTemplate[] }>>(
+			"/admin/settings/whatsapp-templates",
+			{
+				method: "PUT",
+				body: JSON.stringify({ templates }),
 			},
 		),
 

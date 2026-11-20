@@ -1,9 +1,12 @@
 import { useStyletron } from "baseui";
 import { Button, KIND, SIZE } from "baseui/button";
 import { toaster } from "baseui/toast";
-import { Copy, ExternalLink } from "lucide-react";
+import { Copy, ExternalLink, MessageCircle } from "lucide-react";
 import { useState } from "react";
-import type { ApiCalDAVRepairAction } from "../../../api";
+import type {
+	ApiCalDAVRepairAction,
+	ApiWhatsAppTemplate,
+} from "../../../api";
 import ConfirmationDialog from "../../../components/ConfirmationDialog";
 import type { Appointment } from "../hooks/useAppointmentsPage";
 
@@ -19,6 +22,7 @@ interface Props {
 	repairingAction: ApiCalDAVRepairAction | null;
 	isPast: boolean;
 	canDelete: boolean;
+	whatsappTemplates: ApiWhatsAppTemplate[];
 	t: (key: string) => string;
 }
 
@@ -34,10 +38,12 @@ export default function AppointmentCard({
 	repairingAction,
 	isPast,
 	canDelete,
+	whatsappTemplates,
 	t,
 }: Props) {
 	const [css] = useStyletron();
 	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
 	const [confirmMode, setConfirmMode] = useState<
 		"delete" | "cancel" | "reject" | null
 	>(null);
@@ -78,6 +84,29 @@ export default function AppointmentCard({
 	const repairActions: ApiCalDAVRepairAction[] = hasCalDAVConflict
 		? ["retry", "refresh_etag", "force_overwrite"]
 		: [];
+
+	const handleOpenWhatsApp = () => {
+		if (!appointment.whatsapp) return;
+		const digits = appointment.whatsapp.replace(/[^\d]/g, "");
+		if (!digits) return;
+
+		const activeTemplateId =
+			selectedTemplateId || whatsappTemplates[0]?.id || "";
+		const template = whatsappTemplates.find(
+			(item) => item.id === activeTemplateId,
+		);
+		const rawMessage = template?.message || "";
+		const filledMessage = rawMessage
+			.replace(/\{nombre\}/g, appointment.name || "")
+			.replace(/\{asiento\}/g, appointment.seat || "")
+			.replace(/\{fecha\}/g, formatDate(appointment.start_at))
+			.replace(/\{lugar\}/g, appointment.meeting_place || "");
+
+		const url = filledMessage
+			? `https://wa.me/${digits}?text=${encodeURIComponent(filledMessage)}`
+			: `https://wa.me/${digits}`;
+		window.open(url, "_blank", "noopener,noreferrer");
+	};
 
 	return (
 		<>
@@ -205,6 +234,68 @@ export default function AppointmentCard({
 								})}
 							>
 								{t("appointments.note")}: {appointment.note}
+							</div>
+						)}
+						{appointment.seat && (
+							<div
+								className={css({
+									fontSize: "13px",
+									fontWeight: 600,
+									color: "var(--color-text-secondary)",
+									marginTop: "6px",
+								})}
+							>
+								{t("appointments.seat")}: {appointment.seat}
+							</div>
+						)}
+						{appointment.whatsapp && (
+							<div
+								className={css({
+									display: "flex",
+									alignItems: "center",
+									gap: "8px",
+									flexWrap: "wrap",
+									marginTop: "8px",
+								})}
+							>
+								<span
+									className={css({
+										fontSize: "13px",
+										color: "var(--color-text-secondary)",
+										fontWeight: 600,
+									})}
+								>
+									{t("appointments.whatsapp")}: {appointment.whatsapp}
+								</span>
+								{whatsappTemplates.length > 0 && (
+									<select
+										value={selectedTemplateId || whatsappTemplates[0]?.id || ""}
+										onChange={(e) => setSelectedTemplateId(e.currentTarget.value)}
+										className={css({
+											backgroundColor: "var(--color-bg-tertiary)",
+											color: "var(--color-text-primary)",
+											border: "1px solid var(--color-bg-quaternary)",
+											borderRadius: "6px",
+											padding: "4px 8px",
+											fontSize: "12px",
+										})}
+									>
+										{whatsappTemplates.map((tpl) => (
+											<option key={tpl.id} value={tpl.id}>
+												{tpl.title}
+											</option>
+										))}
+									</select>
+								)}
+								<Button
+									type="button"
+									kind={KIND.secondary}
+									size={SIZE.mini}
+									onClick={handleOpenWhatsApp}
+								>
+									<MessageCircle size={13} style={{ marginRight: "4px" }} />
+									{t("appointments.openWhatsApp")}
+								</Button>
 							</div>
 						)}
 						{appointment.meeting_place && (

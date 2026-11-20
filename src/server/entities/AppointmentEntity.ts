@@ -29,6 +29,12 @@ export class AppointmentEntity {
 	note!: string | null;
 
 	@Column({ type: "text", nullable: true })
+	seat!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	whatsapp!: string | null;
+
+	@Column({ type: "text", nullable: true })
 	start_at!: string | null;
 
 	@Column({ type: "text", nullable: true })

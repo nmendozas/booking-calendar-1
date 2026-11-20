@@ -89,6 +89,18 @@ export default function SlotCard({
 					>
 						{formatDate(slot.start_at)} - {formatDate(slot.end_at)}
 					</div>
+					{slot.seats && slot.seats.length > 0 && (
+						<div
+							className={css({
+								marginTop: "6px",
+								fontSize: "13px",
+								color: "var(--color-text-tertiary)",
+							})}
+						>
+							{slot.seats.length} {t("slots.seatsCountLabel")}:{" "}
+							{slot.seats.join(", ")}
+						</div>
+					)}
 				</div>
 				<div
 					className={css({

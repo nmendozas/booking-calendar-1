@@ -27,10 +27,13 @@ export default function SlotsPage() {
 		setStatusFilter,
 		setSlotName,
 		setStartAt,
+		selectedSeats,
+		setSelectedSeats,
 		slotName,
 		startAt,
 		statusFilter,
 		editingSlot,
+		openCreateModal,
 		openEditModal,
 		search,
 		setSearch,
@@ -53,7 +56,7 @@ export default function SlotsPage() {
 
 	return (
 		<div>
-			<SlotsHeader onAddClick={() => setModalOpen(true)} t={t} />
+			<SlotsHeader onAddClick={openCreateModal} t={t} />
 
 			{initialLoading ? (
 				<PageLoadingSpinner label={t("common.loading")} />
@@ -134,6 +137,8 @@ export default function SlotsPage() {
 				setEndAt={setEndAt}
 				slotName={slotName}
 				setSlotName={setSlotName}
+				selectedSeats={selectedSeats}
+				setSelectedSeats={setSelectedSeats}
 				onCreate={editingSlot ? handleUpdate : handleCreate}
 				loading={loading}
 				t={t}

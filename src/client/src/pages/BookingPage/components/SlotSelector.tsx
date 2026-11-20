@@ -19,6 +19,10 @@ export default function SlotSelector({
 	const [css] = useStyletron();
 
 	const isFullyOccupied = (slot: Slot) => {
+		if (slot.seats && slot.seats.length > 0) {
+			return (slot.booked_count ?? 0) >= slot.seats.length;
+		}
+
 		const slotStart = new Date(slot.start_at).getTime();
 		const slotEnd = new Date(slot.end_at).getTime();
 		if (slotEnd <= slotStart) return true;
@@ -120,6 +124,18 @@ export default function SlotSelector({
 									},
 						})}
 					>
+						{slot.name && (
+							<div
+								className={css({
+									fontWeight: 700,
+									fontSize: "15px",
+									marginBottom: "4px",
+									color: "var(--color-text-primary)",
+								})}
+							>
+								{slot.name}
+							</div>
+						)}
 						<div className={css({ fontWeight: 600 })}>
 							{formatDate(slot.start_at)}
 						</div>
@@ -134,7 +150,23 @@ export default function SlotSelector({
 						>
 							- {formatDate(slot.end_at)}
 						</div>
-						{disabled && (
+						{slot.seats && slot.seats.length > 0 && (
+							<div
+								className={css({
+									color: disabled
+										? "var(--color-error-text)"
+										: "var(--color-success-text)",
+									fontSize: "12px",
+									fontWeight: 600,
+									marginTop: "8px",
+								})}
+							>
+								{disabled
+									? t("booking.slotFullyOccupied")
+									: `${slot.seats.length - (slot.booked_count ?? 0)} / ${slot.seats.length} ${t("booking.seatsAvailable")}`}
+							</div>
+						)}
+						{disabled && (!slot.seats || slot.seats.length === 0) && (
 							<div
 								className={css({
 									color: "var(--color-error-text)",

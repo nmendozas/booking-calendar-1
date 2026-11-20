@@ -39,6 +39,7 @@ export default function AppointmentsPage() {
 		isActive,
 		totalCount,
 		pendingCount,
+		whatsappTemplates,
 	} = useAppointmentsPage(t);
 
 	const formatDate = (d: string) =>
@@ -125,6 +126,7 @@ export default function AppointmentsPage() {
 							repairingAction={repairingAction}
 							isPastAppointment={isPastAppointment}
 							canDeleteAppointment={canDeleteAppointment}
+							whatsappTemplates={whatsappTemplates}
 							t={t}
 						/>
 					)}

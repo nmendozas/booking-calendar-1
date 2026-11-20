@@ -4,6 +4,7 @@ export interface AvailabilitySlot {
 	start_at: string;
 	end_at: string;
 	is_active: number;
+	seats: string[] | null;
 	created_at: string;
 }
 
@@ -135,6 +136,8 @@ export interface CalDAVSyncRunResult {
 
 export interface PublicAvailabilitySlot extends AvailabilitySlot {
 	busy_intervals: BusyInterval[];
+	booked_seats: string[];
+	booked_count: number;
 }
 
 export interface BookingLink {
@@ -154,6 +157,8 @@ export interface Appointment {
 	email: string | null;
 	meeting_place: string | null;
 	note: string | null;
+	seat?: string | null;
+	whatsapp?: string | null;
 	start_at: string;
 	end_at: string;
 	slug_id: string | null;
@@ -187,6 +192,7 @@ export interface CreateSlotInput {
 	name: string;
 	start_at: string;
 	end_at: string;
+	seats?: string[];
 }
 
 export interface CreateAppointmentInput {
@@ -196,8 +202,16 @@ export interface CreateAppointmentInput {
 	email?: string;
 	meeting_place?: string;
 	note?: string;
+	seat?: string;
+	whatsapp?: string;
 	start_at: string;
 	end_at: string;
+}
+
+export interface WhatsAppTemplate {
+	id: string;
+	title: string;
+	message: string;
 }
 
 export interface CreateBookingLinkInput {

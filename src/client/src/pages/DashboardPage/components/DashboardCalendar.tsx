@@ -1,5 +1,5 @@
 import { format, getDay, parse, startOfWeek } from "date-fns";
-import { enUS, tr } from "date-fns/locale";
+import { enUS, es, tr } from "date-fns/locale";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useStyletron } from "baseui";
@@ -23,6 +23,7 @@ import { useI18n } from "../../../context/I18nContext";
 const locales = {
 	"en-US": enUS,
 	"tr-TR": tr,
+	"es-ES": es,
 };
 
 const localizer = dateFnsLocalizer({
@@ -292,11 +293,10 @@ export default function DashboardCalendar({
 							backgroundColor: visibleTypes.has("slot")
 								? `${theme.colors.backgroundPositive}33`
 								: "transparent",
-							border: `1px solid ${
-								visibleTypes.has("slot")
+							border: `1px solid ${visibleTypes.has("slot")
 									? theme.colors.borderPositive
 									: theme.colors.borderOpaque
-							}`,
+								}`,
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 							display: "flex",
@@ -336,11 +336,10 @@ export default function DashboardCalendar({
 							backgroundColor: visibleTypes.has("appointment")
 								? theme.colors.accent700
 								: "transparent",
-							border: `1px solid ${
-								visibleTypes.has("appointment")
+							border: `1px solid ${visibleTypes.has("appointment")
 									? theme.colors.accent
 									: theme.colors.borderOpaque
-							}`,
+								}`,
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 							display: "flex",
@@ -381,11 +380,10 @@ export default function DashboardCalendar({
 							backgroundColor: visibleTypes.has("planner")
 								? "var(--color-warning-bg)"
 								: "transparent",
-							border: `1px solid ${
-								visibleTypes.has("planner")
+							border: `1px solid ${visibleTypes.has("planner")
 									? "var(--color-warning)"
 									: theme.colors.borderOpaque
-							}`,
+								}`,
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 							display: "flex",
@@ -426,11 +424,10 @@ export default function DashboardCalendar({
 							backgroundColor: visibleTypes.has("community")
 								? "var(--color-error-bg)"
 								: "transparent",
-							border: `1px solid ${
-								visibleTypes.has("community")
+							border: `1px solid ${visibleTypes.has("community")
 									? "var(--color-error)"
 									: theme.colors.borderOpaque
-							}`,
+								}`,
 							cursor: "pointer",
 							transition: "all 0.2s ease",
 							display: "flex",
@@ -620,7 +617,9 @@ export default function DashboardCalendar({
 					onView={(nextView) => setView(nextView as "month" | "week" | "day")}
 					date={date}
 					onNavigate={(newDate) => setDate(newDate)}
-					culture={language === "tr" ? "tr-TR" : "en-US"}
+					culture={
+						language === "tr" ? "tr-TR" : language === "es" ? "es-ES" : "en-US"
+					}
 					messages={messages}
 					onSelectEvent={(event) => {
 						setSelectedEvent(event as CalendarEvent);

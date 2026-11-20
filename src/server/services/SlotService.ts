@@ -89,8 +89,9 @@ export class SlotService {
 		}
 
 		const slotIdList = slots.map((slot) => slot.id);
-		const [intervals, caldavIntervals] = await Promise.all([
+		const [intervals, bookedSeatRows, caldavIntervals] = await Promise.all([
 			this.appointmentRepo.findActiveIntervalsBySlotIds(slotIdList),
+			this.appointmentRepo.findActiveBookedSeatsBySlotIds(slotIdList),
 			this.caldavService.getBusyIntervals(
 				slots[0].start_at,
 				slots[slots.length - 1].end_at,
@@ -98,6 +99,20 @@ export class SlotService {
 		]);
 
 		const busyBySlotId = new Map<number, BusyInterval[]>();
+		const bookedSeatsBySlotId = new Map<number, string[]>();
+		const bookedCountBySlotId = new Map<number, number>();
+
+		for (const row of bookedSeatRows) {
+			bookedCountBySlotId.set(
+				row.slot_id,
+				(bookedCountBySlotId.get(row.slot_id) ?? 0) + 1,
+			);
+			if (row.seat) {
+				const existing = bookedSeatsBySlotId.get(row.slot_id) || [];
+				existing.push(row.seat);
+				bookedSeatsBySlotId.set(row.slot_id, existing);
+			}
+		}
 
 		for (const interval of intervals) {
 			const existing = busyBySlotId.get(interval.slot_id) || [];
@@ -123,8 +138,27 @@ export class SlotService {
 
 		return slots.map((slot) => ({
 			...slot,
-			busy_intervals: this.mergeBusyIntervals(busyBySlotId.get(slot.id) || []),
+			busy_intervals:
+				slot.seats && slot.seats.length > 0
+					? []
+					: this.mergeBusyIntervals(busyBySlotId.get(slot.id) || []),
+			booked_seats: bookedSeatsBySlotId.get(slot.id) || [],
+			booked_count: bookedCountBySlotId.get(slot.id) ?? 0,
 		}));
+	}
+
+	private normalizeSeatsInput(seats?: string[]): string[] | undefined {
+		if (!Array.isArray(seats)) return undefined;
+		const seen = new Set<string>();
+		const cleaned: string[] = [];
+		for (const item of seats) {
+			if (typeof item !== "string") continue;
+			const trimmed = item.trim();
+			if (!trimmed || seen.has(trimmed)) continue;
+			seen.add(trimmed);
+			cleaned.push(trimmed);
+		}
+		return cleaned;
 	}
 
 	async createSlot(input: CreateSlotInput): Promise<AvailabilitySlot> {
@@ -144,9 +178,12 @@ export class SlotService {
 			throw new Error(t("slot.endAfterStart"));
 		}
 
+		const normalizedSeats = this.normalizeSeatsInput(input.seats);
+
 		const slot = await this.slotRepo.create({
 			...input,
 			name: slotName,
+			seats: normalizedSeats,
 		});
 
 		this.webhookService
@@ -233,6 +270,12 @@ export class SlotService {
 
 			updatePayload.start_at = startAt;
 			updatePayload.end_at = endAt;
+		}
+
+		if (input.seats !== undefined) {
+			const normalizedSeats = this.normalizeSeatsInput(input.seats);
+			updatePayload.seats =
+				normalizedSeats && normalizedSeats.length > 0 ? normalizedSeats : null;
 		}
 
 		const updated = await this.slotRepo.update(id, updatePayload);

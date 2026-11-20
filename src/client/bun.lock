@@ -5,27 +5,27 @@
     "": {
       "name": "booking-calendar-client",
       "dependencies": {
-        "@types/react-big-calendar": "latest",
-        "baseui": "latest",
-        "date-fns": "latest",
-        "lucide-react": "latest",
-        "react": "latest",
-        "react-big-calendar": "latest",
-        "react-dom": "latest",
-        "react-router-dom": "latest",
-        "styletron-engine-atomic": "latest",
-        "styletron-react": "latest",
+        "@types/react-big-calendar": "^1.16.3",
+        "baseui": "^16.1.1",
+        "date-fns": "^4.1.0",
+        "lucide-react": "^1.7.0",
+        "react": "^19.2.4",
+        "react-big-calendar": "^1.19.4",
+        "react-dom": "^19.2.4",
+        "react-router-dom": "^7.14.0",
+        "styletron-engine-atomic": "^1.6.2",
+        "styletron-react": "^6.1.1",
       },
       "devDependencies": {
-        "@types/react": "latest",
-        "@types/react-dom": "latest",
-        "@vitejs/plugin-react": "latest",
-        "typescript": "latest",
-        "vite": "latest",
-        "vite-plugin-pwa": "latest",
-        "workbox-precaching": "latest",
-        "workbox-routing": "latest",
-        "workbox-strategies": "latest",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.1",
+        "typescript": "^6.0.2",
+        "vite": "^8.0.3",
+        "vite-plugin-pwa": "^1.2.0",
+        "workbox-precaching": "^7.4.0",
+        "workbox-routing": "^7.4.0",
+        "workbox-strategies": "^7.4.0",
       },
     },
   },
@@ -394,7 +394,7 @@
 
     "clsx": ["clsx@1.2.1", "", {}, "sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg=="],
 
-    "commander": ["commander@7.2.0", "", {}, "sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw=="],
+    "commander": ["commander@2.20.3", "", {}, "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="],
 
     "common-tags": ["common-tags@1.8.2", "", {}, "sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA=="],
 
@@ -1094,6 +1094,8 @@
 
     "baseui/date-fns": ["date-fns@2.30.0", "", { "dependencies": { "@babel/runtime": "^7.21.0" } }, "sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw=="],
 
+    "d3-dsv/commander": ["commander@7.2.0", "", {}, "sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw=="],
+
     "file-selector/tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
 
     "filelist/minimatch": ["minimatch@5.1.6", "", { "dependencies": { "brace-expansion": "^2.0.1" } }, "sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g=="],
@@ -1111,8 +1113,6 @@
     "rolldown/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.12", "", {}, "sha512-HHMwmarRKvoFsJorqYlFeFRzXZqCt2ETQlEDOb9aqssrnVBB1/+xgTGtuTrIk5vzLNX1MjMtTf7W9z3tsSbrxw=="],
 
     "source-map-support/source-map": ["source-map@0.6.1", "", {}, "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="],
-
-    "terser/commander": ["commander@2.20.3", "", {}, "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="],
 
     "tinyglobby/picomatch": ["picomatch@4.0.3", "", {}, "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q=="],
 

@@ -16,8 +16,10 @@ export const handleAdminSlotRoutes: AdminRouteHandler = async (args) => {
 
 	if (pathname === "/api/admin/slots" && method === "POST") {
 		const body = await parseJsonBody<{
+			name?: string;
 			start_at?: string;
 			end_at?: string;
+			seats?: string[];
 		}>(args.request);
 		const result = await args.slotController.createSlot(body);
 		return jsonResponse(result.status, result.body, corsHeaders);
@@ -49,6 +51,7 @@ export const handleAdminSlotRoutes: AdminRouteHandler = async (args) => {
 			name?: string;
 			start_at?: string;
 			end_at?: string;
+			seats?: string[];
 		}>(args.request);
 		const result = await args.slotController.updateSlot(id, body);
 		return jsonResponse(result.status, result.body, corsHeaders);

@@ -9,8 +9,12 @@ export interface BusyInterval {
 
 export interface Slot {
 	id: number;
+	name?: string | null;
 	start_at: string;
 	end_at: string;
+	seats?: string[] | null;
+	booked_seats?: string[];
+	booked_count?: number;
 	busy_intervals: BusyInterval[];
 }
 
@@ -99,7 +103,9 @@ export function useBookingPage(
 	const [slots, setSlots] = useState<Slot[]>([]);
 	const [requiresApproval, setRequiresApproval] = useState(false);
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+	const [selectedSeat, setSelectedSeat] = useState("");
 	const [name, setName] = useState("");
+	const [whatsapp, setWhatsapp] = useState("");
 	const [email, setEmail] = useState("");
 	const [meetingPlace, setMeetingPlace] = useState("");
 	const [note, setNote] = useState("");
@@ -142,6 +148,19 @@ export function useBookingPage(
 
 	const selectSlot = useCallback(
 		(slot: Slot) => {
+			if (slot.seats && slot.seats.length > 0) {
+				const bookedCount = slot.booked_count ?? 0;
+				if (bookedCount >= slot.seats.length) {
+					toaster.negative(t("booking.slotFullyOccupied"), {});
+					return;
+				}
+				setSelectedSlot(slot.id);
+				setSelectedSeat("");
+				setSelectedStartAt(toLocalDateTimeInputValue(slot.start_at));
+				setSelectedEndAt(toLocalDateTimeInputValue(slot.end_at));
+				return;
+			}
+
 			const freeIntervals = getFreeIntervals(slot);
 			if (freeIntervals.length === 0) {
 				toaster.negative(t("booking.slotFullyOccupied"), {});
@@ -149,6 +168,7 @@ export function useBookingPage(
 			}
 
 			setSelectedSlot(slot.id);
+			setSelectedSeat("");
 			setSelectedStartAt(toLocalDateTimeInputValue(freeIntervals[0].start_at));
 			setSelectedEndAt(toLocalDateTimeInputValue(freeIntervals[0].end_at));
 		},
@@ -201,11 +221,6 @@ export function useBookingPage(
 				return;
 			}
 
-			if (requiresApproval && !email.trim()) {
-				toaster.negative(t("booking.emailRequiredForApproval"), {});
-				return;
-			}
-
 			if (!selectedSlotData) {
 				toaster.negative(t("booking.slotNotFound"), {});
 				return;
@@ -229,7 +244,18 @@ export function useBookingPage(
 				return;
 			}
 
-			if (hasOverlap(startIso, endIso, selectedSlotData.busy_intervals)) {
+			const isSeatTrip = Boolean(
+				selectedSlotData.seats && selectedSlotData.seats.length > 0,
+			);
+			if (isSeatTrip && !selectedSeat) {
+				toaster.negative(t("booking.seatRequired"), {});
+				return;
+			}
+
+			if (
+				!isSeatTrip &&
+				hasOverlap(startIso, endIso, selectedSlotData.busy_intervals)
+			) {
 				toaster.negative(t("booking.overlapOccupied"), {});
 				return;
 			}
@@ -244,9 +270,11 @@ export function useBookingPage(
 				const result = await api.createAppointment(slugId, {
 					slot_id: selectedSlot,
 					name,
+					whatsapp: whatsapp.trim() || undefined,
 					email: email || undefined,
 					meeting_place: meetingPlace || undefined,
 					note: note || undefined,
+					seat: isSeatTrip ? selectedSeat : undefined,
 					start_at: startIso,
 					end_at: endIso,
 				});
@@ -263,12 +291,13 @@ export function useBookingPage(
 			name,
 			note,
 			selectedEndAt,
+			selectedSeat,
 			selectedSlot,
 			selectedSlotData,
 			selectedStartAt,
 			t,
 			slugId,
-			requiresApproval,
+			whatsapp,
 		],
 	);
 
@@ -280,7 +309,9 @@ export function useBookingPage(
 		name,
 		note,
 		selectedEndAt,
+		selectedSeat,
 		selectedSlot,
+		selectedSlotData,
 		selectedSlotBusyIntervals,
 		selectedStartAt,
 		selectSlot,
@@ -288,6 +319,9 @@ export function useBookingPage(
 		setMeetingPlace,
 		setName,
 		setNote,
+		setSelectedSeat,
+		setWhatsapp,
+		whatsapp,
 		setSelectedEndAt: setSelectedEndAtSafe,
 		setSelectedStartAt: setSelectedStartAtSafe,
 		slots,

@@ -37,7 +37,11 @@
 		"alreadyCanceled": "Randevu zaten iptal edilmiş",
 		"invalidCancelLink": "Geçersiz iptal bağlantısı",
 		"notPending": "Bu randevu onay bekleyen bir randevu değil",
-		"emailRequiredForApproval": "Onay gerektiren randevular için e-posta adresi zorunludur"
+		"emailRequiredForApproval": "Onay gerektiren randevular için e-posta adresi zorunludur",
+		"seatRequired": "Lütfen uygun bir koltuk seçin",
+		"invalidSeat": "Seçilen koltuk bu yolculuk için uygun değil",
+		"seatAlreadyTaken": "Seçilen koltuk zaten rezerve edilmiş",
+		"slotFull": "Bu yolculuk için boş koltuk kalmadı"
 	},
 	"link": {
 		"invalidToken": "Geçersiz veya süresi dolmuş token",

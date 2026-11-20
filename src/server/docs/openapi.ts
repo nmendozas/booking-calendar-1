@@ -890,7 +890,7 @@ export function createOpenApiDocument(): Record<string, unknown> {
 									type: "object",
 									required: ["language"],
 									properties: {
-										language: { type: "string", enum: ["en", "tr"] },
+										language: { type: "string", enum: ["en", "tr", "es"] },
 									},
 								},
 							},

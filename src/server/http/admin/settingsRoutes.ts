@@ -24,7 +24,7 @@ export const handleAdminSettingsRoutes: AdminRouteHandler = async (args) => {
 	if (pathname === "/api/admin/settings/language" && method === "PUT") {
 		const body = await parseJsonBody<{ language?: string }>(args.request);
 		const lang = body.language;
-		if (!lang || (lang !== "en" && lang !== "tr")) {
+		if (!lang || (lang !== "en" && lang !== "tr" && lang !== "es")) {
 			return jsonResponse(
 				400,
 				{ success: false, error: t("general.invalidLanguage") },
@@ -76,6 +76,72 @@ export const handleAdminSettingsRoutes: AdminRouteHandler = async (args) => {
 		const settingsRepo = new SettingsRepository();
 		await settingsRepo.set("admin_email", email);
 		return jsonResponse(200, { success: true, data: { email } }, corsHeaders);
+	}
+
+	if (
+		pathname === "/api/admin/settings/whatsapp-templates" &&
+		method === "GET"
+	) {
+		const settingsRepo = new SettingsRepository();
+		const raw = await settingsRepo.get("whatsapp_templates");
+		let templates: Array<{ id: string; title: string; message: string }> = [
+			{
+				id: "reminder",
+				title: "Recordatorio de viaje",
+				message:
+					"Hola {nombre}, te recordamos tu viaje programado para el {fecha} en el asiento {asiento}. Punto de recogida: {lugar}. ¡Te esperamos!",
+			},
+			{
+				id: "confirmed",
+				title: "Confirmación de puesto",
+				message:
+					"Hola {nombre}, tu puesto ({asiento}) ha sido confirmado para el viaje del {fecha}.",
+			},
+		];
+		if (raw) {
+			try {
+				const parsed = JSON.parse(raw);
+				if (Array.isArray(parsed)) {
+					templates = parsed.filter(
+						(item): item is { id: string; title: string; message: string } =>
+							typeof item?.id === "string" &&
+							typeof item?.title === "string" &&
+							typeof item?.message === "string",
+					);
+				}
+			} catch {
+				// Keep default templates if stored JSON is invalid
+			}
+		}
+		return jsonResponse(
+			200,
+			{ success: true, data: { templates } },
+			corsHeaders,
+		);
+	}
+
+	if (
+		pathname === "/api/admin/settings/whatsapp-templates" &&
+		method === "PUT"
+	) {
+		const body = await parseJsonBody<{
+			templates?: Array<{ id?: string; title?: string; message?: string }>;
+		}>(args.request);
+		const incoming = Array.isArray(body.templates) ? body.templates : [];
+		const cleaned = incoming
+			.map((item, idx) => ({
+				id: (item.id || `tpl-${Date.now()}-${idx}`).trim(),
+				title: (item.title || "").trim(),
+				message: (item.message || "").trim(),
+			}))
+			.filter((item) => item.title.length > 0 && item.message.length > 0);
+		const settingsRepo = new SettingsRepository();
+		await settingsRepo.set("whatsapp_templates", JSON.stringify(cleaned));
+		return jsonResponse(
+			200,
+			{ success: true, data: { templates: cleaned } },
+			corsHeaders,
+		);
 	}
 
 	if (pathname === "/api/admin/settings/calendar-sharing" && method === "GET") {

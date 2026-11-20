@@ -1,4 +1,5 @@
-import { KIND } from "baseui/button";
+import { Button, KIND, SIZE } from "baseui/button";
+import { Checkbox } from "baseui/checkbox";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import {
@@ -8,6 +9,8 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "baseui/modal";
+import { useState } from "react";
+import { DEFAULT_CAR_SEATS } from "../hooks/useSlotsPage";
 
 interface Props {
 	endAt: string;
@@ -15,6 +18,8 @@ interface Props {
 	loading: boolean;
 	onClose: () => void;
 	onCreate: () => void;
+	selectedSeats: string[];
+	setSelectedSeats: (seats: string[]) => void;
 	setSlotName: (value: string) => void;
 	setEndAt: (value: string) => void;
 	setStartAt: (value: string) => void;
@@ -30,6 +35,8 @@ export default function CreateSlotModal({
 	loading,
 	onClose,
 	onCreate,
+	selectedSeats,
+	setSelectedSeats,
 	setSlotName,
 	setEndAt,
 	setStartAt,
@@ -38,6 +45,28 @@ export default function CreateSlotModal({
 	t,
 	isEditing = false,
 }: Props) {
+	const [customSeat, setCustomSeat] = useState("");
+
+	const allKnownSeats = Array.from(
+		new Set([...DEFAULT_CAR_SEATS, ...selectedSeats]),
+	);
+
+	const toggleSeat = (seat: string) => {
+		if (selectedSeats.includes(seat)) {
+			setSelectedSeats(selectedSeats.filter((item) => item !== seat));
+		} else {
+			setSelectedSeats([...selectedSeats, seat]);
+		}
+	};
+
+	const handleAddCustomSeat = () => {
+		const trimmed = customSeat.trim();
+		if (!trimmed) return;
+		if (!selectedSeats.includes(trimmed)) {
+			setSelectedSeats([...selectedSeats, trimmed]);
+		}
+		setCustomSeat("");
+	};
 	return (
 		<Modal
 			onClose={onClose}
@@ -93,6 +122,43 @@ export default function CreateSlotModal({
 							},
 						}}
 					/>
+				</FormControl>
+				<FormControl
+					label={`${t("slots.seatsLabel")} (${selectedSeats.length})`}
+					caption={t("slots.seatsHint")}
+				>
+					<div style={{ display: "grid", gap: "8px" }}>
+						{allKnownSeats.map((seat) => (
+							<Checkbox
+								key={seat}
+								checked={selectedSeats.includes(seat)}
+								onChange={() => toggleSeat(seat)}
+							>
+								{seat}
+							</Checkbox>
+						))}
+						<div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+							<Input
+								value={customSeat}
+								placeholder={t("slots.customSeatPlaceholder")}
+								onChange={(e) => setCustomSeat(e.currentTarget.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										handleAddCustomSeat();
+									}
+								}}
+							/>
+							<Button
+								type="button"
+								kind={KIND.secondary}
+								size={SIZE.compact}
+								onClick={handleAddCustomSeat}
+							>
+								{t("slots.addSeat")}
+							</Button>
+						</div>
+					</div>
 				</FormControl>
 			</ModalBody>
 			<ModalFooter>

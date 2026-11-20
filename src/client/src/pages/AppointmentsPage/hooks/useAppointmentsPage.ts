@@ -1,6 +1,10 @@
 import { toaster } from "baseui/toast";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ApiAppointment, ApiCalDAVRepairAction } from "../../../api";
+import type {
+	ApiAppointment,
+	ApiCalDAVRepairAction,
+	ApiWhatsAppTemplate,
+} from "../../../api";
 import { api } from "../../../api";
 import { useListFilters } from "../../../hooks/useListFilters";
 
@@ -39,11 +43,18 @@ export function useAppointmentsPage(t: (key: string) => string) {
 	const [statusFilter, setStatusFilter] =
 		useState<AppointmentStatusFilter>("all");
 	const [initialLoading, setInitialLoading] = useState(true);
+	const [whatsappTemplates, setWhatsappTemplates] = useState<
+		ApiWhatsAppTemplate[]
+	>([]);
 
 	const loadAppointments = useCallback(async () => {
 		try {
-			const result = await api.getAppointments("all");
+			const [result, templatesRes] = await Promise.all([
+				api.getAppointments("all"),
+				api.getWhatsAppTemplates().catch(() => ({ data: { templates: [] } })),
+			]);
 			setAppointments(result.data);
+			setWhatsappTemplates(templatesRes.data.templates);
 		} catch (err: unknown) {
 			toaster.negative(getErrorMessage(err, t("common.error")), {});
 		} finally {
@@ -197,5 +208,6 @@ export function useAppointmentsPage(t: (key: string) => string) {
 		isActive,
 		totalCount: statusFilteredAppointments.length,
 		pendingCount,
+		whatsappTemplates,
 	};
 }

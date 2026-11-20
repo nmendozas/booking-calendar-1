@@ -1,7 +1,7 @@
 {
 	"app": {
-		"title": "Calendario de Reservas",
-		"titleShort": "CR"
+		"title": "Reserva de Viajes",
+		"titleShort": "RV"
 	},
 	"nav": {
 		"dashboard": "Panel",

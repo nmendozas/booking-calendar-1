@@ -5,11 +5,11 @@ FROM oven/bun:1 AS client-builder
 WORKDIR /app
 
 # Build-time args – injected into the static bundle by Vite (cannot be changed at runtime)
-ARG VITE_SEO_TITLE="Calendar"
-ARG VITE_SEO_DESCRIPTION="Personal calendar"
-ARG VITE_SEO_LANG="en"
-ARG VITE_SEO_KEYWORDS="booking,calendar,appointments,self-hosted"
-ARG VITE_SEO_AUTHOR="Calendar"
+ARG VITE_SEO_TITLE="Reserva de Viajes"
+ARG VITE_SEO_DESCRIPTION="Reserva de puestos para viajes"
+ARG VITE_SEO_LANG="es"
+ARG VITE_SEO_KEYWORDS="viajes,reservas,puestos,carro"
+ARG VITE_SEO_AUTHOR="Reserva de Viajes"
 ARG VITE_SEO_OG_TYPE="website"
 ARG VITE_SEO_TWITTER_CARD="summary"
 ARG VITE_PUBLIC_URL=""

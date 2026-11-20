@@ -15,11 +15,12 @@ export default function LinksHeader({ onCreateClick, t }: Props) {
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "flex-start",
+				flexWrap: "wrap",
 				marginBottom: "24px",
 				gap: "16px",
 			})}
 		>
-			<div>
+			<div className={css({ flex: "1 1 220px", minWidth: 0 })}>
 				<h1
 					className={css({
 						fontSize: "28px",
@@ -43,7 +44,16 @@ export default function LinksHeader({ onCreateClick, t }: Props) {
 					{t("links.description")}
 				</p>
 			</div>
-			<Button onClick={onCreateClick}>{t("links.create")}</Button>
+			<Button
+				onClick={onCreateClick}
+				overrides={{
+					BaseButton: {
+						style: { whiteSpace: "nowrap", flexShrink: 0 },
+					},
+				}}
+			>
+				{t("links.create")}
+			</Button>
 		</div>
 	);
 }

@@ -15,11 +15,12 @@ export default function SlotsHeader({ onAddClick, t }: Props) {
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "flex-start",
+				flexWrap: "wrap",
 				marginBottom: "24px",
 				gap: "16px",
 			})}
 		>
-			<div>
+			<div className={css({ flex: "1 1 220px", minWidth: 0 })}>
 				<h1
 					className={css({
 						fontSize: "28px",
@@ -43,7 +44,16 @@ export default function SlotsHeader({ onAddClick, t }: Props) {
 					{t("slots.description")}
 				</p>
 			</div>
-			<Button onClick={onAddClick}>{t("slots.addSlot")}</Button>
+			<Button
+				onClick={onAddClick}
+				overrides={{
+					BaseButton: {
+						style: { whiteSpace: "nowrap", flexShrink: 0 },
+					},
+				}}
+			>
+				{t("slots.addSlot")}
+			</Button>
 		</div>
 	);
 }

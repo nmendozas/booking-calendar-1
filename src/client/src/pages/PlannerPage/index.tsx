@@ -52,11 +52,12 @@ export default function PlannerPage() {
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "flex-start",
+					flexWrap: "wrap",
 					marginBottom: "24px",
 					gap: "16px",
 				})}
 			>
-				<div>
+				<div className={css({ flex: "1 1 220px", minWidth: 0 })}>
 					<h1
 						className={css({
 							fontSize: "28px",
@@ -80,7 +81,16 @@ export default function PlannerPage() {
 						{t("planner.pageDescription")}
 					</p>
 				</div>
-				<Button onClick={openCreate}>{t("planner.addEvent")}</Button>
+				<Button
+					onClick={openCreate}
+					overrides={{
+						BaseButton: {
+							style: { whiteSpace: "nowrap", flexShrink: 0 },
+						},
+					}}
+				>
+					{t("planner.addEvent")}
+				</Button>
 			</div>
 
 			{initialLoading ? (

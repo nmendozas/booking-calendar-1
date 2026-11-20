@@ -272,11 +272,13 @@ export default function AdminLayout() {
 			<main
 				className={css({
 					flex: 1,
+					minWidth: 0,
 					height: "100%",
 					padding: "32px",
 					overflowY: "auto",
+					overflowX: "hidden",
 					"@media (max-width: 768px)": {
-						padding: "16px",
+						padding: "14px 12px",
 					},
 				})}
 			>

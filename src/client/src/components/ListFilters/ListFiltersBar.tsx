@@ -93,7 +93,7 @@ export default function ListFiltersBar({
 				</div>
 
 				{/* Sort */}
-				<div className={css({ flex: "1 1 180px" })}>
+				<div className={css({ flex: "1 1 180px", minWidth: 0, width: "100%" })}>
 					<Select
 						options={[
 							{ id: "newest", label: t("common.sortNewest") },
@@ -154,38 +154,47 @@ export default function ListFiltersBar({
 						display: "flex",
 						flexDirection: "column",
 						gap: "4px",
-						flex: "1 1 320px",
+						flex: "1 1 260px",
+						minWidth: 0,
+						width: "100%",
 					})}
 				>
 					<div
 						className={css({
 							display: "flex",
 							alignItems: "center",
-							gap: "4px",
+							flexWrap: "wrap",
+							gap: "6px",
 							backgroundColor: "var(--color-bg-tertiary)",
-							padding: "0 12px",
+							padding: "4px 10px",
 							borderRadius: "8px",
 							border: "1px solid var(--color-border-primary)",
-							height: "36px",
+							minHeight: "36px",
+							width: "100%",
 							transition: "border-color 0.2s",
 							":focus-within": {
 								borderColor: "var(--color-accent-600)",
 							},
 						})}
 					>
-						<Calendar size={16} color="var(--color-accent-600)" />
+						<Calendar
+							size={16}
+							color="var(--color-accent-600)"
+							style={{ flexShrink: 0 }}
+						/>
 						<input
 							type="date"
 							value={from}
 							onChange={(e) => onFromChange(e.target.value)}
 							className={css({
-								padding: "4px 8px",
+								padding: "4px 4px",
 								fontSize: "13px",
 								border: "none",
 								backgroundColor: "transparent",
 								color: "var(--color-text-primary)",
 								outline: "none",
-								width: "125px",
+								flex: "1 1 110px",
+								minWidth: 0,
 								cursor: "pointer",
 								"::-webkit-calendar-picker-indicator": {
 									filter: "invert(0.5)",
@@ -197,7 +206,7 @@ export default function ListFiltersBar({
 							className={css({
 								color: "var(--color-text-muted)",
 								fontSize: "14px",
-								margin: "0 4px",
+								margin: "0 2px",
 							})}
 						>
 							—
@@ -207,13 +216,14 @@ export default function ListFiltersBar({
 							value={to}
 							onChange={(e) => onToChange(e.target.value)}
 							className={css({
-								padding: "4px 8px",
+								padding: "4px 4px",
 								fontSize: "13px",
 								border: "none",
 								backgroundColor: "transparent",
 								color: "var(--color-text-primary)",
 								outline: "none",
-								width: "125px",
+								flex: "1 1 110px",
+								minWidth: 0,
 								cursor: "pointer",
 								"::-webkit-calendar-picker-indicator": {
 									filter: "invert(0.5)",

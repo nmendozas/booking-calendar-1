@@ -74,6 +74,17 @@ export default function PublicCalendarView({
 				.rbc-off-range-bg { background-color: var(--color-bg-off-range); }
 				.rbc-time-header-gutter.rbc-header { border-right: none; }
 				.rbc-month-view, .rbc-month-row, .rbc-time-view, .rbc-time-header, .rbc-time-header-content, .rbc-time-content, .rbc-timeslot-group, .rbc-day-bg, .rbc-day-slot, .rbc-header, .rbc-agenda-view, .rbc-agenda-table, .rbc-agenda-table td, .rbc-agenda-table th { border-color: var(--color-bg-quaternary) !important; }
+				@media (max-width: 768px) {
+					.rbc-toolbar { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px; }
+					.rbc-toolbar .rbc-toolbar-label { order: -1; text-align: center; font-size: 1em; padding: 2px 0; }
+					.rbc-toolbar .rbc-btn-group { display: flex; width: 100%; }
+					.rbc-toolbar .rbc-btn-group button { flex: 1; padding: 7px 6px; font-size: 12px; }
+					.rbc-header { font-size: 10px; padding: 6px 2px; }
+					.rbc-date-cell { font-size: 11px; padding-right: 4px; }
+					.rbc-event { font-size: 10px; padding: 1px 3px; }
+					.rbc-time-view { overflow-x: auto; }
+					.rbc-label { font-size: 10px; padding: 0 3px; }
+				}
 			`}</style>
 
 			<Calendar

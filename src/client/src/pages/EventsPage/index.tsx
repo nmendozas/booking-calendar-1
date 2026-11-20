@@ -17,11 +17,12 @@ export default function EventsPage() {
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "flex-start",
+					flexWrap: "wrap",
 					marginBottom: "24px",
 					gap: "16px",
 				})}
 			>
-				<div>
+				<div className={css({ flex: "1 1 220px", minWidth: 0 })}>
 					<h1
 						className={css({
 							fontSize: "28px",
@@ -48,7 +49,11 @@ export default function EventsPage() {
 				</div>
 				<Button
 					onClick={() => setShowForm(true)}
-					className={css({ flexShrink: 0 })}
+					overrides={{
+						BaseButton: {
+							style: { whiteSpace: "nowrap", flexShrink: 0 },
+						},
+					}}
 				>
 					<Plus size={14} />
 					<span className={css({ marginLeft: "6px" })}>

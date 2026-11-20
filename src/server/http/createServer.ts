@@ -7,62 +7,72 @@ import { handleStaticRoutes } from "./staticRoutes";
 import type { ServerDependencies } from "./types";
 import { getClientIp, jsonResponse, robotsHeaderValue } from "./utils";
 
+export function createFetchHandler(dependencies: ServerDependencies) {
+	return async function fetch(
+		request: Request,
+		server?: { requestIP?: (req: Request) => { address: string } | null },
+	): Promise<Response> {
+		const url = new URL(request.url);
+		const { pathname } = url;
+		const method = request.method;
+
+		const corsHeaders = {
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+			"Access-Control-Allow-Headers":
+				"Content-Type, Authorization, X-BookingCalendar-Timestamp, X-BookingCalendar-Signature, X-BookingCalendar-Request-Id",
+			"X-Robots-Tag": robotsHeaderValue,
+		};
+
+		if (method === "OPTIONS") {
+			return new Response(null, { status: 204, headers: corsHeaders });
+		}
+
+		const clientIp = server
+			? getClientIp(request, server as Parameters<typeof getClientIp>[1])
+			: getClientIp(request, { requestIP: () => null } as unknown as Parameters<
+					typeof getClientIp
+				>[1]);
+		const rateResult = checkRateLimit(clientIp);
+		if (!rateResult.allowed) {
+			return jsonResponse(
+				429,
+				{ success: false, error: t("general.tooManyRequests") },
+				{
+					...corsHeaders,
+					"Retry-After": String(Math.ceil(rateResult.retryAfterMs / 1000)),
+				},
+			);
+		}
+
+		const routeArgs = {
+			...dependencies,
+			request,
+			url,
+			pathname,
+			method,
+			corsHeaders,
+			clientIp,
+		};
+
+		const publicResponse = await handlePublicRoutes(routeArgs);
+		if (publicResponse) {
+			return publicResponse;
+		}
+
+		const adminResponse = await handleAdminRoutes(routeArgs);
+		if (adminResponse) {
+			return adminResponse;
+		}
+
+		return await handleStaticRoutes(pathname, corsHeaders);
+	};
+}
+
 export function createServer(dependencies: ServerDependencies) {
 	return Bun.serve({
 		port: config.port,
 		hostname: config.host,
-		async fetch(request, server) {
-			const url = new URL(request.url);
-			const { pathname } = url;
-			const method = request.method;
-
-			const corsHeaders = {
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods":
-					"GET, POST, PUT, PATCH, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers":
-					"Content-Type, Authorization, X-BookingCalendar-Timestamp, X-BookingCalendar-Signature, X-BookingCalendar-Request-Id",
-				"X-Robots-Tag": robotsHeaderValue,
-			};
-
-			if (method === "OPTIONS") {
-				return new Response(null, { status: 204, headers: corsHeaders });
-			}
-
-			const clientIp = getClientIp(request, server);
-			const rateResult = checkRateLimit(clientIp);
-			if (!rateResult.allowed) {
-				return jsonResponse(
-					429,
-					{ success: false, error: t("general.tooManyRequests") },
-					{
-						...corsHeaders,
-						"Retry-After": String(Math.ceil(rateResult.retryAfterMs / 1000)),
-					},
-				);
-			}
-
-			const routeArgs = {
-				...dependencies,
-				request,
-				url,
-				pathname,
-				method,
-				corsHeaders,
-				clientIp,
-			};
-
-			const publicResponse = await handlePublicRoutes(routeArgs);
-			if (publicResponse) {
-				return publicResponse;
-			}
-
-			const adminResponse = await handleAdminRoutes(routeArgs);
-			if (adminResponse) {
-				return adminResponse;
-			}
-
-			return await handleStaticRoutes(pathname, corsHeaders);
-		},
+		fetch: createFetchHandler(dependencies),
 	});
 }

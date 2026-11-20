@@ -27,6 +27,6 @@ export class BookingLinkEntity {
 	@Column({ type: "boolean", default: false })
 	requires_approval!: boolean;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 }

@@ -10,6 +10,22 @@ import { PlannerEventEntity } from "../entities/PlannerEventEntity";
 import { PushSubscriptionEntity } from "../entities/PushSubscriptionEntity";
 import { SettingsEntity } from "../entities/SettingsEntity";
 
+const ENTITIES = [
+	AvailabilitySlotEntity,
+	BookingLinkEntity,
+	AppointmentEntity,
+	AdminCredentialEntity,
+	SettingsEntity,
+	PushSubscriptionEntity,
+	PlannerEventEntity,
+	CommunityEventEntity,
+];
+
+function getPostgresUrl(): string | null {
+	const raw = (process.env.DATABASE_URL || process.env.POSTGRES_URL || "").trim();
+	return raw.length > 0 ? raw : null;
+}
+
 function getDatabasePath(): string {
 	return config.db.path;
 }
@@ -49,26 +65,32 @@ async function ensureDatabaseDirectory(dbPath: string): Promise<void> {
 	}
 }
 
-export const AppDataSource = new DataSource({
-	type: "sqljs",
-	location: getDatabasePath(),
-	autoSave: true,
-	synchronize: true,
-	entities: [
-		AvailabilitySlotEntity,
-		BookingLinkEntity,
-		AppointmentEntity,
-		AdminCredentialEntity,
-		SettingsEntity,
-		PushSubscriptionEntity,
-		PlannerEventEntity,
-		CommunityEventEntity,
-	],
-	logging: false,
-	sqlJsConfig: {
-		locateFile: (fileName: string) => `node_modules/sql.js/dist/${fileName}`,
-	},
-});
+const initialPostgresUrl = getPostgresUrl();
+
+export const AppDataSource = initialPostgresUrl
+	? new DataSource({
+			type: "postgres",
+			url: initialPostgresUrl,
+			synchronize: true,
+			ssl:
+				initialPostgresUrl.includes("localhost") ||
+				initialPostgresUrl.includes("127.0.0.1")
+					? false
+					: { rejectUnauthorized: false },
+			entities: ENTITIES,
+			logging: false,
+		})
+	: new DataSource({
+			type: "sqljs",
+			location: getDatabasePath(),
+			autoSave: true,
+			synchronize: true,
+			entities: ENTITIES,
+			logging: false,
+			sqlJsConfig: {
+				locateFile: (fileName: string) => `node_modules/sql.js/dist/${fileName}`,
+			},
+		});
 
 async function configureDataSourceForCurrentPath(): Promise<string> {
 	const dbPath = getDatabasePath();
@@ -82,6 +104,11 @@ async function configureDataSourceForCurrentPath(): Promise<string> {
 
 export async function initializeDataSource(): Promise<void> {
 	if (AppDataSource.isInitialized) return;
+
+	if (getPostgresUrl()) {
+		await AppDataSource.initialize();
+		return;
+	}
 
 	const dbPath = await configureDataSourceForCurrentPath();
 	const databaseFile = Bun.file(dbPath);
@@ -98,6 +125,11 @@ export async function initializeDataSource(): Promise<void> {
 
 export async function closeDataSource(): Promise<void> {
 	if (!AppDataSource.isInitialized) return;
+
+	if (getPostgresUrl()) {
+		await AppDataSource.destroy();
+		return;
+	}
 
 	const dbPath = getDatabasePath();
 	await ensureDatabaseDirectory(dbPath);

@@ -44,7 +44,7 @@ export class BookingLinkRepository {
 		const row = await this.repo()
 			.createQueryBuilder("link")
 			.where("link.slug_id = :slugId", { slugId })
-			.andWhere("datetime(link.expires_at) > datetime('now')")
+			.andWhere("link.expires_at > :now", { now: new Date().toISOString() })
 			.getOne();
 
 		return row ? this.toDomain(row) : null;

@@ -43,6 +43,6 @@ export class CommunityEventEntity {
 	@Column({ type: "text", default: "pending" })
 	status!: string; // pending | active | canceled
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 }

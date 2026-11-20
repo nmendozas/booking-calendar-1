@@ -20,9 +20,9 @@ export class AdminCredentialEntity {
 	@Column({ type: "boolean", default: true })
 	is_default_password!: boolean;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 
-	@UpdateDateColumn({ type: "datetime" })
+	@UpdateDateColumn()
 	updated_at!: string;
 }

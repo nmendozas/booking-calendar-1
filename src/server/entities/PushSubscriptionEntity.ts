@@ -19,7 +19,7 @@ export class PushSubscriptionEntity {
 	@Column({ type: "text" })
 	auth!: string;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 
 	@Column({ type: "text", nullable: true })

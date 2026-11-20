@@ -106,7 +106,7 @@ export class AppointmentEntity {
 	@Column({ type: "text", nullable: true })
 	caldav_sync_policy!: string | null;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 
 	@ManyToOne(

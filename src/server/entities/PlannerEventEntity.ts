@@ -25,6 +25,6 @@ export class PlannerEventEntity {
 	@Column({ type: "text", nullable: true })
 	color!: string | null;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 }

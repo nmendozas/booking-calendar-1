@@ -27,7 +27,7 @@ export class AvailabilitySlotEntity {
 	@Column({ type: "text", nullable: true })
 	seats!: string | null;
 
-	@CreateDateColumn({ type: "datetime" })
+	@CreateDateColumn()
 	created_at!: string;
 
 	@OneToMany(
